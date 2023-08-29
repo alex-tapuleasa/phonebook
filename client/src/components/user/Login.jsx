@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 // import Typography from '@mui/material/Typography';
 // import Container from '@mui/material/Container';
 // import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 
 
@@ -33,6 +33,8 @@ const Login = () => {
   const [userContext, setUserContext] = useContext(UserContext);
   const [error, setError] = useState('');
 
+  let navigate = useNavigate();
+
   const loginUser = async (values) => {
 
     const {username, password} = values;
@@ -44,8 +46,10 @@ const Login = () => {
         return { ...oldValues, token: data.token, details: data.user}
       })
 
-      // navigate('/contacts');
-      console.log(userContext)
+      setTimeout(() => {
+         
+        navigate(`/${data.user._id}/contacts`)
+     }, 700)
 
     } catch (error) {
       setError(error.response.data.error);

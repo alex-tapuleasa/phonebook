@@ -11,13 +11,16 @@ module.exports.createContact = async (req, res) => {
     const newContact = new Contact({...req.body})
     newContact.contactOwner = req.user._id
     user.contacts.push(newContact)
+    
+    await user.save()
+    // newContact.populate("contactOwner")
+    await newContact.save()
     user.populate({
         path: "contacts"
     })
-    await user.save()
-    newContact.populate("contactOwner")
-    await newContact.save()
     res.send(newContact)
+    console.log(req.body);
+    console.log(req.params.id)
 }
 
 module.exports.showContact = async (req, res) => {

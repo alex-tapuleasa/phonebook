@@ -8,16 +8,16 @@ exports.isLoggedIn = async (req, res, next) => {
         token = req.headers.authorization.split(" ")[1]
     }
     if(!token) {
-        return next(new ExpressError("Not authorized1!", 401))
+        return next(new ExpressError("Not authorized!", 401))
     }
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findById(decoded.id)
         if(!user) 
-        return next(new ExpressError("Not authorized2", 401))
+        return next(new ExpressError("Not user found", 401))
         req.user = user
         next()
     } catch (error) {
-        next(new ExpressError("Not authorized3", 401))
+        next(new ExpressError("Not authorized to access this route!", 401))
     }
 }

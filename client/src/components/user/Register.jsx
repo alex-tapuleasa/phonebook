@@ -50,10 +50,10 @@ const Register = () => {
         })
   
         setSignUpSuccess(data.message);
-        // setTimeout(() => {
+        setTimeout(() => {
          
-        //    navigate('/contacts')
-        // }, 700)
+           navigate(`/${data.user._id}/contacts`)
+        }, 700)
   
       } catch (error) {
         setError(error.response.data.error); 
@@ -115,7 +115,7 @@ const Register = () => {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                >Sign In
+                >Sign up
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>

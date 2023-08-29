@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import axios from 'axios'; 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -37,18 +37,19 @@ const validationSchema = yup.object().shape({
       .string('Enter phone number')
       .required('Phone number is required'),
     email: yup
-    .string('Enter email')
-    .required('Email is required'),
+    .string('Enter email'),
+    // .required('Email is required')
     city: yup
-    .string('Enter city')
-    .required('City is required'),   
+    .string('Enter city'),
+    // .required('City is required'),   
   });
 
 const AddContact = (props) => {
     const [userContext, setUserContext] = useContext(UserContext);
+    const {id} = props
     const onSubmit = async (values) => {
 
-        const {name, phone, email, city} = values;
+        const {name, phone, email, city, id} = values;
     
         
         // const formData = new FormData();
@@ -56,11 +57,27 @@ const AddContact = (props) => {
         //     formData.append('phone', phone);
         //     formData.append('email', email);
         //     formData.append('city', city);
-    
-        await axios.post('/contacts/new', { name, phone, email, city}, {headers: {
-            "Authorization": `Bearer ${userContext.token}`
-          }} );
-        }
+
+        // useEffect(() => {
+        //   // POST request using fetch inside useEffect React hook
+        //   const requestOptions = {
+        //       method: 'POST',
+        //       headers: { 'Content-Type': 'application/json' },
+        //       // body: JSON.stringify({ title: 'React Hooks POST Request Example' })
+        //   };
+        //   fetch('https://localhost:5000/contacts/new', { name: name, phone: phone, email: email, city: city}, requestOptions)
+        //       .then(response => response.json())
+        //       // .then(data => setPostId(data.id));
+        
+        await axios.post(`/${id}/contacts/new`, { name, phone, email, city }, { headers: {
+            "Authorization": `Bearer ${userContext.token}`, 
+            "Content-Type": "application/json"
+            
+          }} )
+          
+          
+      }
+      
 
     const formik = useFormik({
         initialValues: {name: '', phone: '', email: '', city: ''},

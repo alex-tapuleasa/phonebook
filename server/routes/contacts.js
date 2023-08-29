@@ -12,10 +12,10 @@ const {
     deleteContact
 } = require("../controllers/contacts");
 
-router.get('/:id', isLoggedIn, catchAsync(index));
+router.get('/', isLoggedIn, catchAsync(index));
 router.post('/new', isLoggedIn, catchAsync(createContact));
-router.get('/:id/:contactId/details', isLoggedIn, catchAsync(showContact));
-router.put('/:id/:contactId/edit', isLoggedIn, isContactOwner, catchAsync(editContact));
-router.delete('/:id/:contactId/delete', isLoggedIn, isContactOwner, catchAsync(deleteContact));
+router.get('/:contactId/details', isLoggedIn, catchAsync(showContact));
+router.put('/:contactId/edit', isLoggedIn, isContactOwner, catchAsync(editContact));
+router.delete('/:contactId/delete', isLoggedIn, isContactOwner, catchAsync(deleteContact));
 
 module.exports = router;

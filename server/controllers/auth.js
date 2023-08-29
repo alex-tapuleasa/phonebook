@@ -50,24 +50,41 @@ exports.refreshToken = async (req, res, next) => {
                             const token = user.getSignedJwtToken({ _id: userId})
                             const newRefreshToken = user.getSignedRefreshToken({ _id: userId})
                             user.refreshToken[tokenIndex] = {refreshToken: newRefreshToken}
-                            user.save(err => {
-                                if(err) {
-                                    return next(new ExpressError("Something went wrong!", 500))
-                                }
-                                else {
-                                    res.cookie("refreshToken", newRefreshToken, {
-                                        httpOnly: true,
-                                        signed: true,
-                                        samesite: "None",
-                                        secure: true,
-                                        maxAge: 60 * 60 * 24 * 30 * 1000
-                                    })
-                                    res.status(200).json({
-                                        success: true,
-                                        token
-                                    })
-                                }
-                            })
+                            try {
+                                user.save()
+                                res.cookie("refreshToken", newRefreshToken, {
+                                    httpOnly: true,
+                                    signed: true,
+                                    samesite: "None",
+                                    secure: true,
+                                    maxAge: 60 * 60 * 24 * 30 * 1000
+                                })
+                                res.status(200).json({
+                                    success: true,
+                                    token
+                                })
+                            } catch (error) {
+                                return next(new ExpressError("Something went wrong!", 500))
+                            }    
+
+                            // user.save((err) => {
+                            //     if(err) {
+                            //         return next(new ExpressError("Something went wrong!", 500))
+                            //     }
+                            //     else {
+                            //         res.cookie("refreshToken", newRefreshToken, {
+                            //             httpOnly: true,
+                            //             signed: true,
+                            //             samesite: "None",
+                            //             secure: true,
+                            //             maxAge: 60 * 60 * 24 * 30 * 1000
+                            //         })
+                            //         res.status(200).json({
+                            //             success: true,
+                            //             token
+                            //         })
+                            //     }
+                            // })
                             
                         }
                     } else {
